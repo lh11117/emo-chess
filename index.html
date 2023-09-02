@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>emo五子棋</title>
+</head>
+<script>
+    function hasFiveInARow(board) {
+        const rows = board.length;
+        const cols = board[0].length;
+
+        // 检查横向
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols - 4; j++) {
+                if (
+                    board[i][j] !== 0 &&
+                    board[i][j] === board[i][j + 1] &&
+                    board[i][j] === board[i][j + 2] &&
+                    board[i][j] === board[i][j + 3] &&
+                    board[i][j] === board[i][j + 4]
+                ) {
+                    return true;
+                }
+            }
+        }
+
+        // 检查纵向
+        for (let i = 0; i < rows - 4; i++) {
+            for (let j = 0; j < cols; j++) {
+                if (
+                    board[i][j] !== 0 &&
+                    board[i][j] === board[i + 1][j] &&
+                    board[i][j] === board[i + 2][j] &&
+                    board[i][j] === board[i + 3][j] &&
+                    board[i][j] === board[i + 4][j]
+                ) {
+                    return true;
+                }
+            }
+        }
+
+        // 检查左上到右下斜线
+        for (let i = 0; i < rows - 4; i++) {
+            for (let j = 0; j < cols - 4; j++) {
+                if (
+                    board[i][j] !== 0 &&
+                    board[i][j] === board[i + 1][j + 1] &&
+                    board[i][j] === board[i + 2][j + 2] &&
+                    board[i][j] === board[i + 3][j + 3] &&
+                    board[i][j] === board[i + 4][j + 4]
+                ) {
+                    return true;
+                }
+            }
+        }
+
+        // 检查左下到右上斜线
+        for (let i = 4; i < rows; i++) {
+            for (let j = 0; j < cols - 4; j++) {
+                if (
+                    board[i][j] !== 0 &&
+                    board[i][j] === board[i - 1][j + 1] &&
+                    board[i][j] === board[i - 2][j + 2] &&
+                    board[i][j] === board[i - 3][j + 3] &&
+                    board[i][j] === board[i - 4][j + 4]
+                ) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+</script>
+<style>
+    .qi {
+        color: black;
+        border: 5px;
+        border-color: #615d5d;
+        box-sizing: content-box;
+        background-color:#eee;
+    }
+
+    .qi:hover {
+        background-color: #3b3636;
+        color:white;
+    }
+
+    .qp{
+        cursor: crosshair;
+    }
+</style>
+
+<body>
+    <head><a style="cursor: pointer;" onclick="window.open('https://github.com/lh11117/emo-chess')">emo五子棋</a><button class="qi" onclick="if(confirm('重新来？')){location.reload()}">再来一次</button><button class="qi" onclick="window.open('https://github.com/lh11117/emo-chess/README.md#玩法')">怎么玩？</button></head>
+    <br>
+    <div id="qipan"></div>
+    <p><span id="info">X</span>回合</p>
+</body>
+<script>
+    h = '';
+    _ = 1;
+    var qipan = [];
+    function put(x, y) {
+        if(qipan[x][y]!=0){
+            return;
+        }
+        qipan[x][y] = _;
+        document.getElementById('qi_' + x + '_' + y).innerHTML = ((_!=1)?'O':'X');
+        document.getElementById('info').innerHTML = ((_==1)?'O':'X');
+        _ *= -1;
+        if(hasFiveInARow(qipan)){
+            document.getElementById('qipan').style="pointer-events: none;";
+            alert('你输了！刷新再来！');
+        }
+        win = true;
+        qipan.forEach((arr)=>{
+            if(arr.includes(0)){
+                win=false;
+            }
+        })
+        if(win){
+            alert('恭喜你赢了！');
+        }
+    }
+    for (var i = 0; i <= 19; i++) {
+        qipan[i] = [];
+        for (var j = 0; j <= 19; j++) {
+            qipan[i][j] = 0;
+            h += "<button class='qi qp' id='qi_" + i + '_' + j + "' style='width:20px;height:20px;margin:0px;padding:0px;margin-left:3px;' onclick='put(" + i + ',' + j + ")'><span style='visibility:hidden'>-</span></button>"
+        }
+        h += '<br/>'
+    }
+    document.getElementById('qipan').innerHTML = h;
+</script>
+
+</html>
