@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
-
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
     <title>emo五子棋</title>
 </head>
@@ -74,6 +74,40 @@
     }
 </script>
 <style>
+    html {
+        width: 100%;
+        height: 100%;
+    }
+
+    html {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    body {
+        display: grid;
+        grid-template-columns: auto auto;
+        gap: 20px;
+    }
+
+    * {
+        padding: 0px;
+        margin: 0px;
+        box-sizing: border-box;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+    }
+
+    .container {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+
     .qi {
         color: black;
         border: 5px;
@@ -87,19 +121,72 @@
         color:white;
     }
 
-    .qp{
+    #qipan {
+        overflow: auto;
+    }
+
+    .qp {
         cursor: crosshair;
+        display: inline-table;
+        width: 30px;
+        height: 30px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: 1.5px;
+        padding: 0px;
+        transition: all 0.3s;
+    }
+
+    .right {
+        font-family: 'Courier New', Courier, monospace;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .input {
+        display: grid;
+        grid-template-columns: max-content auto;
+    }
+
+    input[type=number] {
+        font-size: 1.3em;
+        border: none;
+        border-bottom: #333 2px solid;
+        outline: none;
+        text-align: center;
+        width: 100%;
+    }
+
+    input[type=number]:focus {
+        border-bottom: purple 2px solid;
+    }
+
+    button {
+        cursor: pointer;
+        padding: 10px 0px;
+        transition: all 0.3s;
     }
 </style>
 
 <body>
-    <head><a style="cursor: pointer;" onclick="window.open('https://github.com/lh11117/emo-chess')">emo五子棋</a></head>
-    <br>
-    <div id="qipan" style="overflow-x: scroll;overflow:scroll;"></div>
-    <p><span id="info" style="color:red;">X</span>回合</p>
-    <input type="number" min="5" max="30" step="1" value="11" id="size">
-    <button class="qi" onclick="if(confirm('重新来？')){window.location.href='./index.html?'+document.getElementById('size').value}">再来一次</button>
-    <button class="qi" onclick="window.open('https://github.com/lh11117/emo-chess#怎么玩')">怎么玩？</button>
+    <div class="left">
+        <div class="container">
+            <h1 style="cursor: pointer;" onclick="window.open('https://github.com/lh11117/emo-chess')">emo五子棋</h1>
+            <span>By lh11117</span>
+        </div>
+        <div id="qipan"></div>
+    </div>
+    <div class="right">
+        <h1>当前是<span id="info" style="color:red;">X</span>回合</h1>
+        <div class="input">
+            <span>行列数: </span>
+            <input type="number" min="5" max="30" step="1" value="11" id="size">
+        </div>
+        <button class="qi" onclick="if(confirm('重新来？')){window.location.href='./index.html?'+document.getElementById('size').value}">再来一次</button>
+        <button class="qi" onclick="window.open('https://github.com/lh11117/emo-chess#怎么玩')">怎么玩？</button>
+    </div>
 </body>
 <script>
     h = '';
@@ -110,7 +197,8 @@
             return;
         }
         qipan[x][y] = _;
-        document.getElementById('qi_' + x + '_' + y).innerHTML = ((_!=1)?'O':'X');
+        document.querySelector('#qi_' + x + '_' + y + '>span').innerHTML = ((_!=1)?'O':'X');
+        document.querySelector('#qi_' + x + '_' + y + '>span').style.visibility = 'initial';
         document.getElementById('qi_' + x + '_' + y).style.color = ((_!=1)?'blue':'red')
         document.getElementById('info').innerHTML = ((_==1)?'O':'X');
         document.getElementById('info').style.color = ((_==1)?'blue':'red')
@@ -139,7 +227,7 @@
         qipan[i] = [];
         for (var j = 0; j < n; j++) {
             qipan[i][j] = 0;
-            h += "<button class='qi qp' id='qi_" + i + '_' + j + "' style='width:20px;height:20px;margin:0px;padding:0px;margin-left:3px;' onclick='put(" + i + ',' + j + ")'><span style='visibility:hidden'>-</span></button>"
+            h += "<div class='qi qp' id='qi_" + i + '_' + j + "' onclick='put(" + i + ',' + j + ")'><span style='visibility: hidden'>-</span></div>"
         }
         h += '<br/>'
     }
